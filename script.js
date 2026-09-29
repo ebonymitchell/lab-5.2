@@ -53,3 +53,78 @@ email.addEventListener("input", function () {
         emailError.innerText = "";
     }
 });
+
+// VALIDATE PASSWORD: Run every time the user types in the password input
+password.addEventListener("input", function () {
+
+    // Check if the required password field is empty
+    if (password.validity.valueMissing) {
+        passwordError.innerText = "Password is required";
+
+        // Check if the password is shorter than minlength="8"
+    } else if (password.validity.tooShort) {
+        passwordError.innerText = "Password must be at least 8 characters";
+
+        // Check if the password does not match the pattern in the HTML
+        // Password must contain lowercase, uppercase, and a number
+    } else if (password.validity.patternMismatch) {
+        passwordError.innerText =
+            "Password must include an uppercase letter, a lowercase letter, and a number.";
+
+        // If the password passes all checks, clear the error message
+    } else {
+        passwordError.innerText = "";
+    }
+});
+
+
+// VALIDATE CONFIRM PASSWORD: Run every time the user types
+confirmPassword.addEventListener("input", function () {
+
+    // Check if the confirm password field is empty
+    if (confirmPassword.validity.valueMissing) {
+        confirmPasswordError.innerText = "Please confirm your password.";
+
+        // Compare the two password values
+    } else if (confirmPassword.value !== password.value) {
+        confirmPasswordError.innerText = "Passwords do not match.";
+
+        // If they match, clear the error
+    } else {
+        confirmPasswordError.innerText = "";
+    }
+});
+
+// HANDLE FORM SUBMISSION
+registrationForm.addEventListener("submit", function (event) {
+
+    // Stop the browser from automatically submitting/reloading the page
+    event.preventDefault();
+
+    // Check whether all HTML validation rules pass
+    // AND make sure both passwords match
+    if (registrationForm.checkValidity() &&
+        confirmPassword.value === password.value) {
+
+        // Save the username in the browser
+        localStorage.setItem("username", username.value);
+
+        // Tell the user registration was successful
+        alert("Registration successful!");
+
+    } else {
+
+        // Find the first input that fails HTML validation
+        let firstInvalid = registrationForm.querySelector(":invalid");
+
+        // If an invalid input was found, move the cursor to it
+        if (firstInvalid) {
+            firstInvalid.focus();
+
+            // If HTML validation passed but passwords don't match,
+            // move the cursor to Confirm Password
+        } else {
+            confirmPassword.focus();
+        }
+    }
+});
