@@ -27,12 +27,29 @@ username.addEventListener("input", function () {
     if (username.validity.valueMissing) {
         usernameError.innerText = "Username is required.";
 
-    // Check if the username is shorter than the minlength="5" rule in the HTML
+        // Check if the username is shorter than the minlength="5" rule in the HTML
     } else if (username.validity.tooShort) {
         usernameError.innerText = "Username must be at least 5 characters.";
 
-    // If the username passes both checks, clear the error message
+        // If the username passes both checks, clear the error message
     } else {
         usernameError.innerText = "";
+    }
+});
+
+// VALIDATE EMAIL: Run every time the user types in the email input
+email.addEventListener("input", function () {
+
+    // Check if the required email field is empty
+    if (email.validity.valueMissing) {
+        emailError.innerText = "Email is required";
+
+        // Check if the email does not match a valid email format
+    } else if (email.validity.typeMismatch) {
+        emailError.innerText = "Must enter a valid email address";
+
+        // If the email passes both checks, clear the error message
+    } else {
+        emailError.innerText = "";
     }
 });
