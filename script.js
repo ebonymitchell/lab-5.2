@@ -103,8 +103,10 @@ registrationForm.addEventListener("submit", function (event) {
 
     // Check whether all HTML validation rules pass
     // AND make sure both passwords match
-    if (registrationForm.checkValidity() &&
-        confirmPassword.value === password.value) {
+    if (
+        registrationForm.checkValidity() &&
+        confirmPassword.value === password.value
+    ) {
 
         // Save the username in the browser
         localStorage.setItem("username", username.value);
@@ -114,15 +116,43 @@ registrationForm.addEventListener("submit", function (event) {
 
     } else {
 
-        // Find the first input that fails HTML validation
+        // Show username error
+        if (username.validity.valueMissing) {
+            usernameError.innerText = "Username is required.";
+        } else if (username.validity.tooShort) {
+            usernameError.innerText = "Username must be at least 5 characters.";
+        }
+
+        // Show email error
+        if (email.validity.valueMissing) {
+            emailError.innerText = "Email is required.";
+        } else if (email.validity.typeMismatch) {
+            emailError.innerText = "Must enter a valid email address.";
+        }
+
+        // Show password error
+        if (password.validity.valueMissing) {
+            passwordError.innerText = "Password is required.";
+        } else if (password.validity.tooShort) {
+            passwordError.innerText = "Password must be at least 8 characters.";
+        } else if (password.validity.patternMismatch) {
+            passwordError.innerText =
+                "Password must include an uppercase letter, a lowercase letter, and a number.";
+        }
+
+        // Show confirm password error
+        if (confirmPassword.validity.valueMissing) {
+            confirmPasswordError.innerText = "Please confirm your password.";
+        } else if (confirmPassword.value !== password.value) {
+            confirmPasswordError.innerText = "Passwords do not match.";
+        }
+
+        // Find the first invalid field
         let firstInvalid = registrationForm.querySelector(":invalid");
 
-        // If an invalid input was found, move the cursor to it
+        // Move the cursor to the first invalid field
         if (firstInvalid) {
             firstInvalid.focus();
-
-            // If HTML validation passed but passwords don't match,
-            // move the cursor to Confirm Password
         } else {
             confirmPassword.focus();
         }
